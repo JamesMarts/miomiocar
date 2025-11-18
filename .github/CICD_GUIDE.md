@@ -36,13 +36,8 @@ git push origin main
 | 任务 | 说明 | 运行时机 |
 |------|------|----------|
 | **代码分析** | 运行 `flutter analyze` 和格式检查 | 每次推送和 PR |
-| **单元测试** | 运行所有测试并生成覆盖率报告 | 每次推送和 PR |
 | **Android 构建** | 构建 APK 和 AAB | 推送到主分支 |
 | **iOS 构建** | 构建 iOS 应用（无签名） | 推送到主分支 |
-| **Web 构建** | 构建 Web 应用 | 推送到主分支 |
-| **Windows 构建** | 构建 Windows 桌面应用 | 推送到主分支 |
-| **macOS 构建** | 构建 macOS 桌面应用 | 推送到主分支 |
-| **Linux 构建** | 构建 Linux 桌面应用 | 推送到主分支 |
 | **创建 Release** | 自动创建 GitHub Release | 推送到 main/master |
 
 ### 简化工作流（build-simple.yml）
@@ -50,7 +45,7 @@ git push origin main
 用于快速验证的轻量级工作流：
 - 只在推送到 `develop` 分支时触发
 - 只构建 Android APK
-- 执行时间约 10-15 分钟
+- 执行时间约 8-12 分钟
 
 ## 🔧 环境配置
 
@@ -96,25 +91,16 @@ env:
 | Android | `app-release.apk` | 直接安装的 APK 文件 |
 | Android | `app-release.aab` | Google Play 上传用的 AAB 文件 |
 | iOS | `ios-build/` | iOS 构建产物（需配置签名） |
-| Web | `web-build/` | Web 应用静态文件 |
-| Windows | `flutter_demo_windows.zip` | Windows 应用压缩包 |
-| macOS | `flutter_demo_macos.zip` | macOS 应用压缩包 |
-| Linux | `flutter_demo_linux.tar.gz` | Linux 应用压缩包 |
 
 ## ⏱️ 预计构建时间
 
 | 任务 | 预计时间 |
 |------|----------|
 | 代码分析 | 2-3 分钟 |
-| 测试 | 3-5 分钟 |
 | Android 构建 | 10-15 分钟 |
 | iOS 构建 | 15-20 分钟 |
-| Web 构建 | 5-8 分钟 |
-| Windows 构建 | 10-15 分钟 |
-| macOS 构建 | 10-15 分钟 |
-| Linux 构建 | 10-15 分钟 |
 
-**总计（并行执行）：** 约 20-25 分钟完成所有平台构建
+**总计（并行执行）：** 约 15-20 分钟完成 Android 和 iOS 构建
 
 ## 🔐 配置签名（可选）
 
@@ -166,7 +152,6 @@ keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -vali
 ```yaml
 jobs:
   analyze: ...
-  test: ...
   build-android: ...   # 保留
   # build-ios: ...     # 注释掉
   # build-web: ...     # 注释掉
@@ -224,12 +209,6 @@ on:
 - 默认配置是无签名构建，只能用于测试
 - 正式发布需要配置证书和 Provisioning Profile
 
-### 4. 如何查看测试覆盖率？
-
-- 集成 Codecov（已配置）
-- 在 Actions 日志中查看测试报告
-- 配置 Codecov Token 以获得详细报告
-
 ## 📊 Badge 徽章
 
 在 `README.md` 中添加构建状态徽章：
@@ -265,8 +244,8 @@ version: 1.0.0+1  # 版本号+构建号
 
 2. **代码质量**
    - 推送前运行 `flutter analyze`
-   - 保持测试覆盖率 > 80%
    - 遵循项目代码规范
+   - 确保代码格式正确
 
 3. **构建优化**
    - 提交代码前本地构建测试

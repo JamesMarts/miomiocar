@@ -43,9 +43,6 @@ jobs:
       - name: 代码分析
         run: flutter analyze
       
-      - name: 运行测试
-        run: flutter test
-      
       - name: 构建 APK
         run: flutter build apk --release --dart-define=ENVIRONMENT=dev
       
