@@ -1,4 +1,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- 配置 url_launcher 所需的查询权限 (Android 11+) -->
+    <queries>
+        <!-- 允许打开网页链接 -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
+        
+        <!-- 允许拨打电话 -->
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+            <data android:scheme="tel" />
+        </intent>
+        
+        <!-- 允许发送邮件 -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+        
+        <!-- 允许发送短信 -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="sms" />
+        </intent>
+    </queries>
+    
     <application
         android:label="flutter_demo"
         android:name="${applicationName}"

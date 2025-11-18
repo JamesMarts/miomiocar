@@ -86,17 +86,17 @@ class ErrorInterceptor extends Interceptor {
 
     // 尝试从响应体中提取错误信息
     String? message;
-    int? businessCode;
+    int? errorCode;
 
     if (data is Map<String, dynamic>) {
-      // 后端返回的标准格式：{ "code": xxx, "message": "xxx", "data": null }
-      businessCode = data['code'] as int?;
-      message = data['message'] as String?;
+      // 玩Android API 返回的格式：{ "errorCode": xxx, "errorMsg": "xxx", "data": null }
+      errorCode = data['errorCode'] as int?;
+      message = data['errorMsg'] as String?;
 
-      // 如果是业务错误（code != 0）
-      if (businessCode != null && businessCode != 0) {
+      // 如果是业务错误（errorCode != 0）
+      if (errorCode != null && errorCode != 0) {
         return ApiException.business(
-          code: businessCode,
+          code: errorCode,
           message: message ?? 'Business error occurred.',
         );
       }

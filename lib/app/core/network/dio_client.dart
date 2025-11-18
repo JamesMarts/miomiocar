@@ -271,7 +271,7 @@ class DioClient {
   }
 
   /// 处理响应数据
-  /// 自动解析标准API响应格式：{ "code": 0, "message": "success", "data": {} }
+  /// 自动解析玩Android API响应格式：{ "data": ..., "errorCode": 0, "errorMsg": "" }
   T _handleResponse<T>(Response response, T Function(dynamic)? fromJson) {
     final data = response.data;
 
@@ -280,19 +280,32 @@ class DioClient {
       return data as T;
     }
 
-    // 解析标准响应格式
-    final apiResponse = ApiResponse.fromJson(data, fromJson);
+    // 玩Android API 响应格式
+    // errorCode: 0 表示成功，非0表示失败
+    // errorMsg: 错误信息
+    // data: 实际数据
+    final errorCode = data['errorCode'] as int? ?? -1;
+    final errorMsg = data['errorMsg'] as String? ?? '';
 
     // 检查业务状态码
-    if (!apiResponse.isSuccess) {
+    if (errorCode != 0) {
+      debugPrint('❌ API业务错误: errorCode=$errorCode, errorMsg=$errorMsg');
       throw ApiException.business(
-        code: apiResponse.code,
-        message: apiResponse.message,
+        code: errorCode,
+        message: errorMsg.isEmpty ? 'Unknown error' : errorMsg,
       );
     }
 
-    // 返回数据部分
-    return apiResponse.data as T;
+    // 获取实际数据
+    final responseData = data['data'];
+
+    // 如果提供了fromJson转换器，使用它转换数据
+    if (fromJson != null) {
+      return fromJson(responseData);
+    }
+
+    // 否则直接返回数据
+    return responseData as T;
   }
 
   /// 处理Dio异常

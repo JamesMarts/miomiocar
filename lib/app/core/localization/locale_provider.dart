@@ -108,3 +108,9 @@ final localeProvider = StateNotifierProvider<LocaleNotifier, Locale>((ref) {
   throw UnimplementedError('localeProvider must be overridden');
 });
 
+
+
+
+
+
+

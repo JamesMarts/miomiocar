@@ -3,6 +3,15 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
+  // ==================== 首页相关 ====================
+
+  /// 首页文章列表
+  /// [page] 页码，从0开始
+  static String articleList(int page) => '/article/list/$page/json';
+
+  /// 首页Banner
+  static const String homeBanner = '/banner/json';
+
   // ==================== 认证相关 ====================
   
   /// 登录
