@@ -1,0 +1,77 @@
+{
+  "@@locale": "ar",
+  "appName": "Flutter Demo",
+  
+  "home": "الرئيسية",
+  
+  "discover": "اكتشف",
+  
+  "notifications": "الإشعارات",
+  
+  "profile": "الملف الشخصي",
+  
+  "settings": "الإعدادات",
+  
+  "language": "اللغة",
+  
+  "themeMode": "وضع السمة",
+  
+  "lightMode": "فاتح",
+  
+  "darkMode": "داكن",
+  
+  "systemMode": "النظام",
+  
+  "english": "English",
+  
+  "arabic": "العربية",
+  
+  "loading": "جاري التحميل...",
+  
+  "retry": "إعادة المحاولة",
+  
+  "cancel": "إلغاء",
+  
+  "confirm": "تأكيد",
+  
+  "save": "حفظ",
+  
+  "delete": "حذف",
+  
+  "edit": "تعديل",
+  
+  "submit": "إرسال",
+  
+  "search": "بحث",
+  
+  "noData": "لا توجد بيانات",
+  
+  "error": "خطأ",
+  
+  "success": "نجح",
+  
+  "networkError": "خطأ في الشبكة. يرجى التحقق من الاتصال.",
+  
+  "serverError": "خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقًا.",
+  
+  "unknownError": "حدث خطأ غير معروف.",
+  
+  "welcome": "مرحبا",
+  
+  "login": "تسجيل الدخول",
+  
+  "logout": "تسجيل الخروج",
+  
+  "username": "اسم المستخدم",
+  
+  "password": "كلمة المرور",
+  
+  "email": "البريد الإلكتروني",
+  
+  "phone": "الهاتف",
+  
+  "userCount": "{count} مستخدمين",
+  
+  "helloUser": "مرحبًا، {name}!"
+}
+

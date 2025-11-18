@@ -1,0 +1,6 @@
+# 国际化配置文件
+arb-dir: lib/app/core/localization/arb
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+

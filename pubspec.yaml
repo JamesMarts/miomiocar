@@ -1,0 +1,87 @@
+name: flutter_demo
+description: "A comprehensive Flutter project with full-stack architecture"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+# 核心依赖
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  # 国际化支持
+  intl: ^0.20.2
+  
+  # 网络请求
+  dio: ^5.4.0
+  pretty_dio_logger: ^1.3.1
+  connectivity_plus: ^5.0.2
+  
+  # JSON序列化
+  json_annotation: ^4.8.1
+  
+  # 状态管理
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
+  
+  # 依赖注入
+  get_it: ^7.6.4
+  
+  # 路由管理
+  go_router: ^13.0.0
+  
+  # 本地存储
+  shared_preferences: ^2.2.2
+  
+  # 日志
+  logger: ^2.0.2
+  
+  # 埋点分析（可选）
+  firebase_analytics: ^10.8.0
+  
+  # 其他工具
+  package_info_plus: ^5.0.1
+  device_info_plus: ^9.1.1
+  
+  # UI组件
+  flutter_svg: ^2.0.9
+  cached_network_image: ^3.3.0
+
+# 开发依赖
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # 代码生成
+  build_runner: ^2.4.7
+  json_serializable: ^6.7.1
+  riverpod_generator: ^2.3.9
+  
+  # 代码规范
+  flutter_lints: ^3.0.1
+  
+  # 测试
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
+  generate: true  # 启用国际化生成
+
+  # 资源文件
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/fonts/
+
+  # 字体配置（可选）
+  fonts:
+    - family: CustomFont
+      fonts:
+        - asset: assets/fonts/aktiv_grotesk.ttf       # Regular 默认 400
+        - asset: assets/fonts/aktiv_grotesk_bold.ttf  # Bold
+          weight: 500

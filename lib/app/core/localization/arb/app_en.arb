@@ -1,0 +1,200 @@
+{
+  "@@locale": "en",
+  "appName": "Flutter Demo",
+  "@appName": {
+    "description": "The application name"
+  },
+  
+  "home": "Home",
+  "@home": {
+    "description": "Home tab label"
+  },
+  
+  "discover": "Discover",
+  "@discover": {
+    "description": "Discover tab label"
+  },
+  
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications tab label"
+  },
+  
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile tab label"
+  },
+  
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  
+  "language": "Language",
+  "@language": {
+    "description": "Language setting label"
+  },
+  
+  "themeMode": "Theme Mode",
+  "@themeMode": {
+    "description": "Theme mode setting label"
+  },
+  
+  "lightMode": "Light",
+  "@lightMode": {
+    "description": "Light theme mode"
+  },
+  
+  "darkMode": "Dark",
+  "@darkMode": {
+    "description": "Dark theme mode"
+  },
+  
+  "systemMode": "System",
+  "@systemMode": {
+    "description": "System theme mode"
+  },
+  
+  "english": "English",
+  "@english": {
+    "description": "English language"
+  },
+  
+  "arabic": "العربية",
+  "@arabic": {
+    "description": "Arabic language"
+  },
+  
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button text"
+  },
+  
+  "save": "Save",
+  "@save": {
+    "description": "Save button text"
+  },
+  
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  
+  "submit": "Submit",
+  "@submit": {
+    "description": "Submit button text"
+  },
+  
+  "search": "Search",
+  "@search": {
+    "description": "Search placeholder text"
+  },
+  
+  "noData": "No data available",
+  "@noData": {
+    "description": "No data placeholder text"
+  },
+  
+  "error": "Error",
+  "@error": {
+    "description": "Error title"
+  },
+  
+  "success": "Success",
+  "@success": {
+    "description": "Success title"
+  },
+  
+  "networkError": "Network error. Please check your connection.",
+  "@networkError": {
+    "description": "Network error message"
+  },
+  
+  "serverError": "Server error. Please try again later.",
+  "@serverError": {
+    "description": "Server error message"
+  },
+  
+  "unknownError": "An unknown error occurred.",
+  "@unknownError": {
+    "description": "Unknown error message"
+  },
+  
+  "welcome": "Welcome",
+  "@welcome": {
+    "description": "Welcome message"
+  },
+  
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  
+  "username": "Username",
+  "@username": {
+    "description": "Username field label"
+  },
+  
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  
+  "phone": "Phone",
+  "@phone": {
+    "description": "Phone field label"
+  },
+  
+  "userCount": "{count} users",
+  "@userCount": {
+    "description": "User count text",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "10"
+      }
+    }
+  },
+  
+  "helloUser": "Hello, {name}!",
+  "@helloUser": {
+    "description": "Greeting message with user name",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  }
+}
+

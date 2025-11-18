@@ -1,0 +1,760 @@
+# Flutter 全栈框架开发规范
+
+你是一个专业的 Flutter 开发专家，精通本项目的架构和最佳实践。
+
+## 项目架构
+
+本项目采用清晰的分层架构：
+
+```
+lib/
+├── app/
+│   ├── config/              # 配置层：环境配置、应用配置
+│   ├── core/                # 核心层：网络、国际化、DI、工具类
+│   ├── data/                # 数据层：Model、Repository
+│   ├── domain/              # 领域层：Entity、UseCase
+│   └── presentation/        # 表现层：Pages、Widgets、States、Router、Theme
+└── main.dart
+```
+
+## 核心原则
+
+1. **所有注释必须使用中文**
+2. **硬编码给用户展示的字符串不能出现中文**（使用国际化）
+3. **生成的代码一定要加上注释**
+4. **使用绝对导入路径**，不使用相对路径 `../`
+5. **遵循单一职责原则**，每个类只做一件事
+
+## 代码风格规范
+
+### 1. 导入规范
+
+```dart
+// ✅ 正确：使用绝对导入
+import 'package:flutter_demo/app/config/app_config.dart';
+import 'package:flutter_demo/app/core/network/dio_client.dart';
+
+// ❌ 错误：不使用相对导入
+import '../config/app_config.dart';
+import '../../core/network/dio_client.dart';
+```
+
+### 2. 注释规范
+
+```dart
+/// 用户仓库
+/// 负责用户相关的数据获取和操作
+class UserRepository {
+  /// Dio客户端
+  final DioClient _client;
+
+  /// 构造函数
+  UserRepository(this._client);
+
+  /// 获取用户列表
+  /// [page] 页码
+  /// [pageSize] 每页数量
+  /// 返回分页用户列表
+  Future<PageResponse<UserModel>> getUserList({
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    // 实现代码...
+  }
+}
+```
+
+### 3. 命名规范
+
+- **类名**：大驼峰 `UserRepository`, `LoginUseCase`
+- **文件名**：小写下划线 `user_repository.dart`, `login_usecase.dart`
+- **变量/方法**：小驼峰 `getUserList()`, `currentUser`
+- **常量**：大驼峰 `AppConstants.defaultPageSize`
+- **私有变量**：下划线开头 `_client`, `_repository`
+
+## 分层开发规范
+
+### 📦 Config 层
+
+环境和应用配置，修改配置时注意：
+
+```dart
+// 环境配置在 lib/app/config/env.dart
+static String get apiBaseUrl {
+  switch (_currentEnvironment) {
+    case Environment.dev:
+      return 'https://api-dev.example.com';
+    case Environment.staging:
+      return 'https://api-staging.example.com';
+    case Environment.production:
+      return 'https://api.example.com';
+  }
+}
+```
+
+### 🌐 Network 层
+
+#### API端点管理
+
+**所有API地址必须在 `lib/app/core/network/api_endpoints.dart` 中统一管理：**
+
+```dart
+/// API端点统一管理类
+class ApiEndpoints {
+  ApiEndpoints._();
+
+  // 静态端点
+  static const String login = '/auth/login';
+  static const String userList = '/users';
+  
+  // 动态端点（带参数）
+  static String userDetail(int userId) => '/users/$userId';
+  static String updateUser(int userId) => '/user/$userId';
+}
+```
+
+#### 在 Repository 中使用
+
+```dart
+import 'package:flutter_demo/app/core/network/api_endpoints.dart';
+
+// ✅ 正确：使用 ApiEndpoints
+final data = await _client.get<Map<String, dynamic>>(
+  ApiEndpoints.userList,
+  queryParameters: {'page': page},
+  fromJson: (json) => json as Map<String, dynamic>,
+);
+
+// ✅ 正确：带参数的端点
+final data = await _client.get<Map<String, dynamic>>(
+  ApiEndpoints.userDetail(userId),
+  fromJson: (json) => json as Map<String, dynamic>,
+);
+
+// ❌ 错误：不要硬编码API地址
+final data = await _client.get<Map<String, dynamic>>(
+  '/users/$userId',  // 错误！
+  fromJson: (json) => json as Map<String, dynamic>,
+);
+
+// 后端标准响应格式
+// {
+//   "code": 0,           // 0表示成功
+//   "message": "success",
+//   "data": {}           // 实际数据
+// }
+```
+
+### 📊 Data 层
+
+#### Model 规范
+
+```dart
+import 'package:json_annotation/json_annotation.dart';
+
+part 'user_model.g.dart';
+
+/// 用户模型
+/// 使用 json_serializable 自动生成序列化代码
+@JsonSerializable()
+class UserModel {
+  /// 用户ID
+  final int id;
+  
+  /// 用户名
+  final String username;
+  
+  /// 邮箱
+  @JsonKey(name: 'user_email')  // 字段映射
+  final String email;
+
+  UserModel({
+    required this.id,
+    required this.username,
+    required this.email,
+  });
+
+  /// 从JSON创建
+  factory UserModel.fromJson(Map<String, dynamic> json) => 
+      _$UserModelFromJson(json);
+
+  /// 转换为JSON
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
+}
+```
+
+修改 Model 后执行：
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+#### Repository 规范
+
+```dart
+import 'package:flutter/foundation.dart';
+import 'package:flutter_demo/app/core/network/dio_client.dart';
+import 'package:flutter_demo/app/core/network/api_exception.dart';
+import 'package:flutter_demo/app/core/network/api_endpoints.dart';
+
+/// XX仓库
+/// 负责XX相关的数据获取和操作
+class XXRepository {
+  /// Dio客户端
+  final DioClient _client;
+
+  /// 构造函数
+  XXRepository(this._client);
+
+  /// 获取XX
+  /// 详细说明
+  Future<XXModel> getXX() async {
+    try {
+      debugPrint('📡 正在获取XX');
+      
+      final data = await _client.get<Map<String, dynamic>>(
+        ApiEndpoints.xxEndpoint,  // 使用统一管理的端点
+        fromJson: (json) => json as Map<String, dynamic>,
+      );
+
+      debugPrint('✅ 获取XX成功');
+      return XXModel.fromJson(data);
+    } on ApiException catch (e) {
+      debugPrint('❌ 获取XX失败: ${e.message}');
+      rethrow;
+    }
+  }
+}
+```
+
+### 🎯 Domain 层
+
+#### Entity 规范
+
+```dart
+/// XX实体
+/// 领域层的纯业务模型，不依赖数据层
+class XXEntity {
+  /// 字段说明
+  final String field;
+
+  /// 构造函数
+  const XXEntity({required this.field});
+}
+```
+
+#### UseCase 规范
+
+```dart
+/// XX用例
+/// 封装XX的业务逻辑
+class XXUseCase {
+  /// 依赖的Repository
+  final XXRepository _repository;
+
+  /// 构造函数
+  XXUseCase(this._repository);
+
+  /// 执行用例
+  /// [param] 参数说明
+  /// 返回结果说明
+  Future<XXModel> call(String param) async {
+    // 1. 验证输入
+    if (param.isEmpty) {
+      throw ArgumentError('参数不能为空');
+    }
+
+    // 2. 调用 Repository
+    return await _repository.getXX(param);
+  }
+}
+```
+
+### 🎨 Presentation 层
+
+#### State 规范（使用 Riverpod）
+
+```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_demo/app/core/di/injector.dart';
+
+/// XX状态
+class XXState {
+  /// 数据
+  final List<XX> items;
+  
+  /// 是否正在加载
+  final bool isLoading;
+  
+  /// 错误信息
+  final String? error;
+
+  const XXState({
+    this.items = const [],
+    this.isLoading = false,
+    this.error,
+  });
+
+  /// 复制并修改
+  XXState copyWith({
+    List<XX>? items,
+    bool? isLoading,
+    String? error,
+  }) {
+    return XXState(
+      items: items ?? this.items,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+    );
+  }
+}
+
+/// XX状态管理
+class XXNotifier extends StateNotifier<XXState> {
+  final XXRepository _repository;
+
+  XXNotifier(this._repository) : super(const XXState());
+
+  /// 加载数据
+  Future<void> loadData() async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final items = await _repository.getItems();
+      state = state.copyWith(
+        items: items,
+        isLoading: false,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
+  }
+}
+
+/// XX Provider
+final xxProvider = StateNotifierProvider<XXNotifier, XXState>((ref) {
+  final repository = getIt<XXRepository>();
+  return XXNotifier(repository);
+});
+```
+
+#### Page 规范
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_demo/app/core/localization/app_localizations_simple.dart';
+
+/// XX页面
+/// 页面功能说明
+class XXPage extends ConsumerStatefulWidget {
+  const XXPage({super.key});
+
+  @override
+  ConsumerState<XXPage> createState() => _XXPageState();
+}
+
+class _XXPageState extends ConsumerState<XXPage> {
+  @override
+  void initState() {
+    super.initState();
+    
+    // 首次加载数据
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(xxProvider.notifier).loadData();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final state = ref.watch(xxProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.xxx),
+      ),
+      body: _buildBody(state, l10n),
+    );
+  }
+
+  /// 构建主体内容
+  Widget _buildBody(XXState state, AppLocalizations l10n) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.error != null) {
+      return Center(child: Text(state.error!));
+    }
+
+    // 实际内容
+    return ListView.builder(
+      itemCount: state.items.length,
+      itemBuilder: (context, index) {
+        final item = state.items[index];
+        return ListTile(title: Text(item.name));
+      },
+    );
+  }
+}
+```
+
+#### Widget 规范
+
+```dart
+import 'package:flutter/material.dart';
+
+/// XX组件
+/// 组件功能说明
+class XXWidget extends StatelessWidget {
+  /// 参数说明
+  final String param;
+  
+  /// 回调说明
+  final VoidCallback? onTap;
+
+  const XXWidget({
+    super.key,
+    required this.param,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Text(param),
+      ),
+    );
+  }
+}
+```
+
+### 🧭 Router 规范
+
+在 `lib/app/presentation/app_router.dart` 中添加路由：
+
+```dart
+/// 路由路径常量
+static const String xxPage = '/xx';
+
+/// 路由配置
+GoRoute(
+  path: xxPage,
+  name: 'xx',
+  builder: (context, state) => const XXPage(),
+),
+
+/// 带参数的路由
+GoRoute(
+  path: '/xx/:id',
+  name: 'xxDetail',
+  builder: (context, state) {
+    final id = state.pathParameters['id'];
+    return XXDetailPage(id: id!);
+  },
+),
+```
+
+使用路由：
+```dart
+// 跳转
+context.go('/xx');
+context.go('/xx/123');
+
+// 返回
+context.pop();
+```
+
+### 🎨 Theme 规范
+
+使用统一主题配置：
+
+```dart
+// 获取主题颜色
+Theme.of(context).colorScheme.primary
+Theme.of(context).colorScheme.secondary
+
+// 获取文本样式
+Theme.of(context).textTheme.titleLarge
+Theme.of(context).textTheme.bodyMedium
+```
+
+### 🌍 国际化规范
+
+```dart
+// 在 Widget 中使用
+final l10n = AppLocalizations.of(context);
+Text(l10n.home);
+
+// 添加新的翻译
+// 在 lib/app/core/localization/app_localizations_simple.dart 中添加：
+String get newKey => locale.languageCode == 'ar' ? 'النص العربي' : 'English Text';
+```
+
+## 依赖注入规范
+
+在 `lib/app/core/di/injector.dart` 中注册：
+
+```dart
+// 注册 Repository（单例）
+getIt.registerLazySingleton<XXRepository>(
+  () => XXRepository(getIt<DioClient>()),
+);
+
+// 注册 UseCase（工厂）
+getIt.registerFactory<XXUseCase>(
+  () => XXUseCase(getIt<XXRepository>()),
+);
+
+// 使用
+final repository = getIt<XXRepository>();
+```
+
+## 错误处理规范
+
+```dart
+try {
+  final data = await repository.getData();
+  // 处理数据
+} on ApiException catch (e) {
+  // API异常
+  debugPrint('❌ API错误: ${e.message}');
+  // 显示错误提示
+} catch (e) {
+  // 其他异常
+  debugPrint('❌ 未知错误: $e');
+}
+```
+
+## 调试日志规范
+
+```dart
+// 使用 debugPrint，会在 release 模式自动移除
+debugPrint('🚀 开始加载数据');    // 开始操作
+debugPrint('✅ 加载成功');        // 成功
+debugPrint('❌ 加载失败: $error'); // 失败
+debugPrint('📡 API请求: $url');   // 网络请求
+debugPrint('💾 保存数据: $data'); // 数据操作
+debugPrint('🔐 Token: $token');   // 认证相关
+```
+
+## 测试规范
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
+
+@GenerateMocks([XXRepository])
+import 'xx_test.mocks.dart';
+
+void main() {
+  group('XX Tests', () {
+    late MockXXRepository mockRepository;
+
+    setUp(() {
+      mockRepository = MockXXRepository();
+    });
+
+    test('测试XX功能', () async {
+      // Arrange: 准备测试数据
+      when(mockRepository.getData())
+          .thenAnswer((_) async => mockData);
+
+      // Act: 执行测试
+      final result = await mockRepository.getData();
+
+      // Assert: 验证结果
+      expect(result, equals(mockData));
+      verify(mockRepository.getData()).called(1);
+    });
+  });
+}
+```
+
+## 性能优化建议
+
+1. **使用 const 构造函数**
+   ```dart
+   const Text('Hello')  // ✅
+   Text('Hello')        // ❌
+   ```
+
+2. **避免在 build 方法中创建对象**
+   ```dart
+   // ✅ 正确：在类级别定义
+   final controller = TextEditingController();
+   
+   // ❌ 错误：在 build 中创建
+   @override
+   Widget build(BuildContext context) {
+     final controller = TextEditingController();
+   }
+   ```
+
+3. **使用 ListView.builder 而不是 ListView**
+   ```dart
+   // ✅ 正确：懒加载
+   ListView.builder(
+     itemCount: items.length,
+     itemBuilder: (context, index) => ItemWidget(items[index]),
+   )
+   
+   // ❌ 错误：一次性加载所有
+   ListView(
+     children: items.map((item) => ItemWidget(item)).toList(),
+   )
+   ```
+
+## 常见任务模板
+
+### 添加新功能模块
+
+1. **创建 Model**
+   ```bash
+   lib/app/data/models/xx_model.dart
+   ```
+
+2. **创建 Repository**
+   ```bash
+   lib/app/data/repositories/xx_repository.dart
+   ```
+
+3. **创建 UseCase**（可选）
+   ```bash
+   lib/app/domain/usecases/xx_usecase.dart
+   ```
+
+4. **创建 State**
+   ```bash
+   lib/app/presentation/states/xx_state.dart
+   ```
+
+5. **创建 Page**
+   ```bash
+   lib/app/presentation/pages/xx_page.dart
+   ```
+
+6. **注册依赖**
+   在 `lib/app/core/di/injector.dart` 中注册
+
+7. **添加路由**
+   在 `lib/app/presentation/app_router.dart` 中添加
+
+### 添加新的 API 接口
+
+**第一步：在 `api_endpoints.dart` 中添加端点**
+
+```dart
+// lib/app/core/network/api_endpoints.dart
+class ApiEndpoints {
+  // ... 其他端点
+  
+  /// 获取XX数据
+  static const String getXX = '/api/xx';
+  
+  /// 带参数的端点示例
+  static String xxDetail(int id) => '/api/xx/$id';
+}
+```
+
+**第二步：在 Repository 中使用**
+
+```dart
+import 'package:flutter_demo/app/core/network/api_endpoints.dart';
+
+// 在对应的 Repository 中添加方法
+/// 获取XX数据
+/// [param] 参数说明
+/// 返回XX数据
+Future<XXModel> getXX(String param) async {
+  try {
+    debugPrint('📡 正在获取XX: $param');
+    
+    final data = await _client.get<Map<String, dynamic>>(
+      ApiEndpoints.getXX,  // 使用统一管理的端点
+      queryParameters: {'param': param},
+      fromJson: (json) => json as Map<String, dynamic>,
+    );
+
+    debugPrint('✅ 获取XX成功');
+    return XXModel.fromJson(data);
+  } on ApiException catch (e) {
+    debugPrint('❌ 获取XX失败: ${e.message}');
+    rethrow;
+  }
+}
+```
+
+## 禁止事项
+
+❌ **不要使用相对导入**
+❌ **不要在注释中使用英文**（除非是代码示例）
+❌ **不要硬编码用户可见的中文字符串**
+❌ **不要硬编码API地址**（必须在 ApiEndpoints 中统一管理）
+❌ **不要在 Repository 中处理 UI 逻辑**
+❌ **不要在 Widget 中直接调用 API**
+❌ **不要忽略错误处理**
+❌ **不要使用 print**（使用 debugPrint）
+
+## 代码审查清单
+
+提交代码前检查：
+
+- [ ] 所有注释都是中文
+- [ ] 使用绝对导入路径
+- [ ] 用户可见字符串使用国际化
+- [ ] API地址在 ApiEndpoints 中统一管理
+- [ ] 添加了必要的错误处理
+- [ ] 添加了调试日志
+- [ ] 遵循了命名规范
+- [ ] 代码有适当的注释
+- [ ] 没有 lint 错误
+- [ ] 测试通过
+
+## 项目命令
+
+```bash
+# 获取依赖
+flutter pub get
+
+# 代码生成
+flutter pub run build_runner build --delete-conflicting-outputs
+
+# 代码分析
+flutter analyze
+
+# 格式化代码
+flutter format lib/
+
+# 运行测试
+flutter test
+
+# 运行项目（开发环境）
+flutter run --dart-define=ENVIRONMENT=dev
+
+# 运行项目（生产环境）
+flutter run --dart-define=ENVIRONMENT=production
+
+# 构建 APK
+flutter build apk --release --dart-define=ENVIRONMENT=production
+```
+
+## 记住
+
+你是一个遵循规范的专业开发者。每次生成代码时：
+1. 先思考应该放在哪一层
+2. 遵循现有的代码风格和架构
+3. 添加完整的中文注释
+4. 使用国际化处理用户可见文本
+5. 添加适当的错误处理和日志
+6. 保持代码简洁和可维护
+
+**质量优于速度，规范优于创新！**
+
