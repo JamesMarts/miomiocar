@@ -48,6 +48,7 @@ dependencies:
   # UI组件
   flutter_svg: ^2.0.9
   cached_network_image: ^3.3.0
+  url_launcher: ^6.2.2
 
 # 开发依赖
 dev_dependencies:
@@ -72,13 +73,35 @@ flutter:
   # 资源文件
   assets:
     - assets/images/
+    - assets/images/backgrounds/
+    - assets/images/placeholders/
+    - assets/images/illustrations/
+    - assets/images/banners/
     - assets/icons/
+    - assets/icons/svg/
+    - assets/icons/png/
+    - assets/animations/
+    - assets/data/
+    - assets/data/mock/
+    - assets/data/config/
     - assets/fonts/
 
-  # 字体配置（可选）
-  fonts:
-    - family: CustomFont
-      fonts:
-        - asset: assets/fonts/aktiv_grotesk.ttf       # Regular 默认 400
-        - asset: assets/fonts/aktiv_grotesk_bold.ttf  # Bold
-          weight: 500
+  # 字体配置示例（根据实际字体文件调整）
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+  #         weight: 400
+  #       - asset: assets/fonts/Roboto/Roboto-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+  #         weight: 700
+  #   
+  #   - family: Cairo
+  #     fonts:
+  #       - asset: assets/fonts/Cairo/Cairo-Regular.ttf
+  #         weight: 400
+  #       - asset: assets/fonts/Cairo/Cairo-SemiBold.ttf
+  #         weight: 600
+  #       - asset: assets/fonts/Cairo/Cairo-Bold.ttf
+  #         weight: 700

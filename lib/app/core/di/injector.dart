@@ -4,6 +4,7 @@ import '../analytics/analytics_service.dart';
 import '../network/dio_client.dart';
 import '../storage/user_storage_manager.dart';
 import '../../data/repositories/user_repository.dart';
+import '../../data/repositories/article_repository.dart';
 
 /// 依赖注入容器
 /// 使用GetIt进行依赖注入管理
@@ -43,6 +44,10 @@ class Injector {
     // 5. 注册Repository（单例）
     getIt.registerLazySingleton<UserRepository>(
       () => UserRepository(getIt<DioClient>()),
+    );
+
+    getIt.registerLazySingleton<ArticleRepository>(
+      () => ArticleRepository(getIt<DioClient>()),
     );
 
     // 6. 初始化埋点服务

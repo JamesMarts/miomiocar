@@ -67,11 +67,11 @@ class Env {
   static String get apiBaseUrl {
     switch (_currentEnvironment) {
       case Environment.dev:
-        return 'https://api-dev.example.com';
+        return 'https://www.wanandroid.com';
       case Environment.staging:
-        return 'https://api-staging.example.com';
+        return 'https://www.wanandroid.com';
       case Environment.production:
-        return 'https://api.example.com';
+        return 'https://www.wanandroid.com';
     }
   }
 
