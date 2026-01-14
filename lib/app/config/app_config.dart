@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_demo/app/config/env.dart';
+import 'package:flutter_demo/app/config/flavor_config.dart';
 
 /// 应用配置类
 /// 统一管理应用级别的配置信息
@@ -48,14 +48,12 @@ class AppConfig {
 
   /// 初始化应用配置
   static Future<void> init() async {
-    // 初始化环境
-    Env.init();
-    
+    // FlavorConfig 已在 main_xxx.dart 中初始化
     // 这里可以添加其他初始化逻辑
     // 例如：读取本地配置、初始化第三方SDK等
     debugPrint('🚀 App Config Initialized');
-    debugPrint('📍 Environment: ${Env.environmentName}');
-    debugPrint('🌐 API Base URL: ${Env.apiBaseUrl}');
+    debugPrint('📍 Environment: ${FlavorConfig.name}');
+    debugPrint('🌐 API Base URL: ${FlavorConfig.values.apiBaseUrl}');
   }
 }
 
@@ -64,25 +62,25 @@ class AppApiConfig {
   AppApiConfig._();
 
   /// API基础URL
-  String get baseUrl => Env.apiBaseUrl;
+  String get baseUrl => FlavorConfig.values.apiBaseUrl;
 
   /// 连接超时时间
-  int get connectTimeout => Env.connectTimeout;
+  int get connectTimeout => FlavorConfig.values.connectTimeout;
 
   /// 接收超时时间
-  int get receiveTimeout => Env.receiveTimeout;
+  int get receiveTimeout => FlavorConfig.values.receiveTimeout;
 
   /// 发送超时时间
-  int get sendTimeout => 30000;
+  int get sendTimeout => FlavorConfig.values.sendTimeout;
 
   /// API版本
   String get apiVersion => 'v1';
 
   /// 是否启用请求日志
-  bool get enableRequestLog => Env.enableLogging;
+  bool get enableRequestLog => FlavorConfig.values.enableLogging;
 
   /// 是否启用响应日志
-  bool get enableResponseLog => Env.enableLogging;
+  bool get enableResponseLog => FlavorConfig.values.enableLogging;
 
   /// 是否启用错误日志
   bool get enableErrorLog => true;
@@ -122,13 +120,16 @@ class AppAnalyticsConfig {
   AppAnalyticsConfig._();
 
   /// 是否启用埋点
-  bool get enabled => true;
+  bool get enabled => FlavorConfig.values.enableAnalytics;
 
   /// 是否启用自动埋点
-  bool get autoTrack => true;
+  bool get autoTrack => FlavorConfig.values.enableAnalytics;
 
   /// 是否启用崩溃上报
-  bool get enableCrashReport => !Env.isDev;
+  bool get enableCrashReport => FlavorConfig.values.enableCrashReporting;
+
+  /// 是否启用性能监控
+  bool get enablePerformanceMonitoring => FlavorConfig.values.enablePerformanceMonitoring;
 
   /// Firebase项目ID（示例）
   String get firebaseProjectId => 'flutter-demo-project';
@@ -173,4 +174,3 @@ class AppConstants {
   /// 验证码倒计时（秒）
   static const int verificationCountdown = 60;
 }
-

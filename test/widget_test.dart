@@ -1,30 +1,37 @@
-// This is a basic Flutter widget test.
+// 基础 Flutter 组件测试
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// 使用 WidgetTester 与组件进行交互测试。
+// 例如，你可以发送点击和滚动手势，
+// 也可以使用 WidgetTester 在组件树中查找子组件、
+// 读取文本、验证组件属性值是否正确。
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:flutter_demo/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_demo/app/config/flavor_config.dart';
+import 'package:flutter_demo/main_common.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  // 在测试前初始化 Flavor 配置
+  setUpAll(() {
+    FlavorConfig.init(
+      flavor: Flavor.dev,
+      values: FlavorValues.dev(),
+    );
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('App should launch successfully', (WidgetTester tester) async {
+    // 构建应用并触发一帧
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: MyApp(),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // 等待应用初始化
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // 验证应用已启动 - 检查是否有 MaterialApp
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

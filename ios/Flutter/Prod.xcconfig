@@ -1,0 +1,18 @@
+// 生产环境配置
+#include "Generated.xcconfig"
+
+// 应用名称
+APP_DISPLAY_NAME=Flutter Demo
+
+// Bundle ID 后缀（生产环境无后缀）
+BUNDLE_ID_SUFFIX=
+
+// 应用 Bundle ID
+PRODUCT_BUNDLE_IDENTIFIER=com.example.flutterDemo
+
+// Flavor 标识
+FLUTTER_FLAVOR=prod
+
+// Dart 入口文件
+FLUTTER_TARGET=lib/main_prod.dart
+

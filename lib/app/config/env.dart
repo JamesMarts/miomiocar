@@ -1,110 +1,71 @@
+import 'package:flutter_demo/app/config/flavor_config.dart';
+
 /// 环境类型枚举
+/// @deprecated 请使用 [Flavor] 代替
+@Deprecated('Use Flavor from flavor_config.dart instead')
 enum Environment {
   /// 开发环境
   dev,
-  
+
   /// 测试环境
   staging,
-  
+
   /// 生产环境
   production,
 }
 
 /// 环境配置类
-/// 负责管理不同环境的配置信息
+/// 提供对 FlavorConfig 的兼容访问
+/// @deprecated 请使用 [FlavorConfig] 代替
+@Deprecated('Use FlavorConfig instead')
 class Env {
-  /// 当前环境
-  static Environment _currentEnvironment = Environment.dev;
-
   /// 获取当前环境
-  static Environment get currentEnvironment => _currentEnvironment;
+  @Deprecated('Use FlavorConfig.flavor instead')
+  static Environment get currentEnvironment {
+    switch (FlavorConfig.flavor) {
+      case Flavor.dev:
+        return Environment.dev;
+      case Flavor.staging:
+        return Environment.staging;
+      case Flavor.prod:
+        return Environment.production;
+    }
+  }
 
   /// 初始化环境
-  /// 支持通过 --dart-define 传入环境参数
-  /// 例如: flutter run --dart-define=ENVIRONMENT=production
+  /// @deprecated 环境通过 FlavorConfig 在 main_xxx.dart 中初始化
+  @Deprecated('Environment is now initialized via FlavorConfig in main entry files')
   static void init() {
-    const String? envString = String.fromEnvironment('ENVIRONMENT');
-    
-    switch (envString?.toLowerCase()) {
-      case 'production':
-      case 'prod':
-        _currentEnvironment = Environment.production;
-        break;
-      case 'staging':
-      case 'stg':
-        _currentEnvironment = Environment.staging;
-        break;
-      case 'development':
-      case 'dev':
-      default:
-        _currentEnvironment = Environment.dev;
-        break;
-    }
+    // 不再需要，保留空方法以兼容旧代码
   }
 
   /// 判断是否为开发环境
-  static bool get isDev => _currentEnvironment == Environment.dev;
+  static bool get isDev => FlavorConfig.isDev;
 
   /// 判断是否为测试环境
-  static bool get isStaging => _currentEnvironment == Environment.staging;
+  static bool get isStaging => FlavorConfig.isStaging;
 
   /// 判断是否为生产环境
-  static bool get isProduction => _currentEnvironment == Environment.production;
+  static bool get isProduction => FlavorConfig.isProd;
 
   /// 获取环境名称
-  static String get environmentName {
-    switch (_currentEnvironment) {
-      case Environment.dev:
-        return 'Development';
-      case Environment.staging:
-        return 'Staging';
-      case Environment.production:
-        return 'Production';
-    }
-  }
+  static String get environmentName => FlavorConfig.name;
 
   /// 获取API基础URL
-  static String get apiBaseUrl {
-    switch (_currentEnvironment) {
-      case Environment.dev:
-        return 'https://www.wanandroid.com';
-      case Environment.staging:
-        return 'https://www.wanandroid.com';
-      case Environment.production:
-        return 'https://www.wanandroid.com';
-    }
-  }
+  static String get apiBaseUrl => FlavorConfig.values.apiBaseUrl;
 
-  /// 获取WebSocket URL（示例）
-  static String get websocketUrl {
-    switch (_currentEnvironment) {
-      case Environment.dev:
-        return 'wss://ws-dev.example.com';
-      case Environment.staging:
-        return 'wss://ws-staging.example.com';
-      case Environment.production:
-        return 'wss://ws.example.com';
-    }
-  }
+  /// 获取WebSocket URL
+  static String get websocketUrl => FlavorConfig.values.websocketUrl ?? '';
 
   /// 是否启用日志
-  static bool get enableLogging {
-    return _currentEnvironment != Environment.production;
-  }
+  static bool get enableLogging => FlavorConfig.values.enableLogging;
 
   /// 是否启用调试模式
-  static bool get enableDebugMode {
-    return _currentEnvironment == Environment.dev;
-  }
+  static bool get enableDebugMode => FlavorConfig.values.enableDebugMode;
 
   /// API超时时间（毫秒）
-  static int get connectTimeout {
-    return _currentEnvironment == Environment.production ? 30000 : 60000;
-  }
+  static int get connectTimeout => FlavorConfig.values.connectTimeout;
 
   /// 接收超时时间（毫秒）
-  static int get receiveTimeout {
-    return _currentEnvironment == Environment.production ? 30000 : 60000;
-  }
+  static int get receiveTimeout => FlavorConfig.values.receiveTimeout;
 }
-

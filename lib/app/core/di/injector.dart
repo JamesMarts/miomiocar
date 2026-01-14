@@ -5,6 +5,7 @@ import 'package:flutter_demo/app/core/network/dio_client.dart';
 import 'package:flutter_demo/app/core/storage/user_storage_manager.dart';
 import 'package:flutter_demo/app/features/user/data/repositories/user_repository.dart';
 import 'package:flutter_demo/app/features/article/data/repositories/article_repository.dart';
+import 'package:flutter_demo/app/features/auth/data/repositories/auth_repository.dart';
 
 /// 依赖注入容器
 /// 使用GetIt进行依赖注入管理
@@ -48,6 +49,11 @@ class Injector {
 
     getIt.registerLazySingleton<ArticleRepository>(
       () => ArticleRepository(getIt<DioClient>()),
+    );
+
+    // 注册认证仓库（单例）
+    getIt.registerLazySingleton<AuthRepository>(
+      () => AuthRepository(getIt<DioClient>()),
     );
 
     // 6. 初始化埋点服务

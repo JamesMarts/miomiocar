@@ -5,6 +5,7 @@ import 'package:flutter_demo/app/router/route_guards.dart';
 import 'package:flutter_demo/app/features/home/home.dart';
 import 'package:flutter_demo/app/features/settings/settings.dart';
 import 'package:flutter_demo/app/features/user/user.dart';
+import 'package:flutter_demo/app/features/auth/auth.dart';
 
 /// 应用路由配置
 /// 使用GoRouter进行路由管理
@@ -46,6 +47,20 @@ class AppRouter {
       path: Routes.home,
       name: RouteNames.home,
       builder: (context, state) => const MainPage(),
+    ),
+
+    /// 登录页
+    GoRoute(
+      path: Routes.login,
+      name: RouteNames.login,
+      builder: (context, state) => const LoginPage(),
+    ),
+
+    /// 注册页
+    GoRoute(
+      path: Routes.register,
+      name: RouteNames.register,
+      builder: (context, state) => const RegisterPage(),
     ),
 
     /// 设置页
@@ -254,6 +269,12 @@ extension AppRouterExtension on BuildContext {
 
   /// 返回首页
   void goHome() => go(Routes.home);
+
+  /// 导航到登录页
+  void goToLogin() => go(Routes.login);
+
+  /// 导航到注册页
+  void goToRegister() => go(Routes.register);
 
   /// 带参数Push导航
   void pushWithParams(String path, Map<String, String> params) {
