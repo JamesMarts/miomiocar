@@ -83,11 +83,11 @@ class UserRepository {
 static String get apiBaseUrl {
   switch (_currentEnvironment) {
     case Environment.dev:
-      return 'https://api-dev.example.com';
+      return 'https://www.wanandroid.com';
     case Environment.staging:
-      return 'https://api-staging.example.com';
+      return 'https://www.wanandroid.com';
     case Environment.production:
-      return 'https://api.example.com';
+      return 'https://www.wanandroid.com';
   }
 }
 ```
@@ -137,10 +137,10 @@ final data = await _client.get<Map<String, dynamic>>(
   fromJson: (json) => json as Map<String, dynamic>,
 );
 
-// 后端标准响应格式
+// 后端标准响应格式（玩Android API）
 // {
-//   "code": 0,           // 0表示成功
-//   "message": "success",
+//   "errorCode": 0,      // 0表示成功，非0表示失败
+//   "errorMsg": "",      // 错误信息
 //   "data": {}           // 实际数据
 // }
 ```

@@ -71,7 +71,22 @@ class AppLocalizations {
   String get password => locale.languageCode == 'ar' ? 'كلمة المرور' : 'Password';
   String get email => locale.languageCode == 'ar' ? 'البريد الإلكتروني' : 'Email';
   String get phone => locale.languageCode == 'ar' ? 'الهاتف' : 'Phone';
-  
+  String get gender => locale.languageCode == 'ar' ? 'الجنس' : 'Gender';
+  String get users => locale.languageCode == 'ar' ? 'المستخدمين' : 'Users';
+  String get userDetail => locale.languageCode == 'ar' ? 'تفاصيل المستخدم' : 'User Detail';
+  String get share => locale.languageCode == 'ar' ? 'مشاركة' : 'Share';
+  String get message => locale.languageCode == 'ar' ? 'رسالة' : 'Message';
+  String get follow => locale.languageCode == 'ar' ? 'متابعة' : 'Follow';
+  String get posts => locale.languageCode == 'ar' ? 'المنشورات' : 'Posts';
+  String get followers => locale.languageCode == 'ar' ? 'المتابعون' : 'Followers';
+  String get following => locale.languageCode == 'ar' ? 'يتابع' : 'Following';
+  String get joinDate => locale.languageCode == 'ar' ? 'تاريخ الانضمام' : 'Join Date';
+  String get refresh => locale.languageCode == 'ar' ? 'تحديث' : 'Refresh';
+  String get noMoreData => locale.languageCode == 'ar' ? 'لا يوجد المزيد من البيانات' : 'No more data';
+  String get loadingMore => locale.languageCode == 'ar' ? 'جاري تحميل المزيد...' : 'Loading more...';
+  String get searchHint => locale.languageCode == 'ar' ? 'بحث...' : 'Search...';
+  String get noSearchResults => locale.languageCode == 'ar' ? 'لا توجد نتائج' : 'No results found';
+
   String userCount(int count) {
     return locale.languageCode == 'ar' ? '$count مستخدمين' : '$count users';
   }

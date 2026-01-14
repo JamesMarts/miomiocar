@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'app/config/app_config.dart';
-import 'app/core/di/injector.dart';
-import 'app/core/localization/locale_provider.dart';
+import 'package:flutter_demo/app/config/app_config.dart';
+import 'package:flutter_demo/app/core/di/injector.dart';
+import 'package:flutter_demo/app/core/localization/locale_provider.dart';
 import 'package:flutter_demo/app/core/localization/app_localizations_simple.dart';
-import 'app/presentation/app_router.dart';
-import 'app/presentation/app_theme.dart';
+import 'package:flutter_demo/app/router/app_router.dart';
+import 'package:flutter_demo/app/theme/app_theme.dart';
 
 /// 应用程序入口
 void main() {
@@ -68,7 +68,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // 监听语言变化
     final locale = ref.watch(localeProvider);
-    
+
     // 监听主题模式变化
     final themeMode = ref.watch(themeModeProvider);
 
@@ -90,7 +90,7 @@ class MyApp extends ConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
       /// 路由配置
-      routerConfig: AppRouter.createRouter(),
+      routerConfig: AppRouter.router,
     );
   }
 }

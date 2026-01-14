@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_demo/app/config/app_config.dart';
-import 'package:flutter_demo/app/data/models/user_model.dart';
+import 'package:flutter_demo/app/features/user/data/models/user_model.dart';
 
 /// 用户信息存储管理类
 /// 负责用户信息的本地持久化，包括保存、读取、更新、清除等操作
@@ -141,8 +141,19 @@ class UserStorageManager {
   /// 判断是否已登录
   /// 同时检查Token和用户信息是否存在
   /// 返回true表示已登录，false表示未登录
-  bool isLoggedIn() {
-    return hasToken() && hasUserInfo();
+  bool get isLoggedIn => hasToken() && hasUserInfo();
+
+  /// 获取用户角色列表
+  /// 返回用户角色列表，用于路由守卫权限检查
+  List<String> getUserRoles() {
+    // TODO: 从用户信息或单独存储中获取角色
+    // 这里暂时返回空列表，实际项目中需要根据后端返回的角色信息来实现
+    final user = getUserInfo();
+    if (user == null) {
+      return [];
+    }
+    // 示例：根据用户ID返回角色（实际应从后端获取）
+    return ['user'];
   }
 
   /// 保存完整的登录信息

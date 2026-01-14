@@ -1,6 +1,6 @@
 import 'package:flutter_demo/app/core/di/injector.dart';
 import 'package:flutter_demo/app/core/storage/user_storage_manager.dart';
-import 'package:flutter_demo/app/data/models/user_model.dart';
+import 'package:flutter_demo/app/features/user/data/models/user_model.dart';
 
 /// UserStorageManager 使用示例
 /// 
@@ -58,7 +58,7 @@ class StorageExample {
     final storage = getIt<UserStorageManager>();
 
     // 检查是否已登录
-    if (storage.isLoggedIn()) {
+    if (storage.isLoggedIn) {
       print('用户已登录');
       
       // 获取用户信息
