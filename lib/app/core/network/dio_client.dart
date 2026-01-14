@@ -78,6 +78,9 @@ class DioClient {
       return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       throw _handleDioException(e);
+    } on ApiException {
+      // 如果已经是 ApiException，直接重新抛出
+      rethrow;
     } catch (e, stackTrace) {
       debugPrint('❌ Unexpected error in GET request: $e');
       throw ApiException.unknown(e.toString());
@@ -110,6 +113,9 @@ class DioClient {
       return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       throw _handleDioException(e);
+    } on ApiException {
+      // 如果已经是 ApiException，直接重新抛出
+      rethrow;
     } catch (e, stackTrace) {
       debugPrint('❌ Unexpected error in POST request: $e');
       throw ApiException.unknown(e.toString());
@@ -142,6 +148,9 @@ class DioClient {
       return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       throw _handleDioException(e);
+    } on ApiException {
+      // 如果已经是 ApiException，直接重新抛出
+      rethrow;
     } catch (e, stackTrace) {
       debugPrint('❌ Unexpected error in PUT request: $e');
       throw ApiException.unknown(e.toString());
@@ -174,6 +183,9 @@ class DioClient {
       return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       throw _handleDioException(e);
+    } on ApiException {
+      // 如果已经是 ApiException，直接重新抛出
+      rethrow;
     } catch (e, stackTrace) {
       debugPrint('❌ Unexpected error in DELETE request: $e');
       throw ApiException.unknown(e.toString());
@@ -206,6 +218,9 @@ class DioClient {
       return _handleResponse<T>(response, fromJson);
     } on DioException catch (e) {
       throw _handleDioException(e);
+    } on ApiException {
+      // 如果已经是 ApiException，直接重新抛出
+      rethrow;
     } catch (e, stackTrace) {
       debugPrint('❌ Unexpected error in PATCH request: $e');
       throw ApiException.unknown(e.toString());

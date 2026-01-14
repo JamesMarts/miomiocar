@@ -12,25 +12,56 @@ class ApiEndpoints {
   /// 首页Banner
   static const String homeBanner = '/banner/json';
 
-  // ==================== 认证相关 ====================
+  // ==================== 认证相关（玩Android API） ====================
   
   /// 登录
-  static const String login = '/auth/login';
+  /// 方法：POST
+  /// 参数：username, password
+  /// 返回：用户信息，登录后会在cookie中返回账号密码
+  static const String login = '/user/login';
   
   /// 注册
-  static const String register = '/auth/register';
+  /// 方法：POST
+  /// 参数：username, password, repassword
+  static const String register = '/user/register';
   
   /// 登出
-  static const String logout = '/auth/logout';
+  /// 方法：GET
+  static const String logout = '/user/logout/json';
   
-  /// 刷新Token
-  static const String refreshToken = '/auth/refresh';
+  /// 获取个人积分（需要登录）
+  /// 方法：GET
+  static const String coinInfo = '/lg/coin/userinfo/json';
   
-  /// 忘记密码
-  static const String forgotPassword = '/auth/forgot-password';
+  /// 获取积分排行榜
+  /// 方法：GET
+  /// 参数：page，从1开始
+  static String coinRank(int page) => '/coin/rank/$page/json';
   
-  /// 重置密码
-  static const String resetPassword = '/auth/reset-password';
+  /// 获取个人积分列表
+  /// 方法：GET
+  /// 参数：page，从1开始
+  static String coinList(int page) => '/lg/coin/list/$page/json';
+  
+  /// 获取个人收藏文章列表
+  /// 方法：GET
+  /// 参数：page，从0开始
+  static String collectList(int page) => '/lg/collect/list/$page/json';
+  
+  /// 收藏站内文章
+  /// 方法：POST
+  /// 参数：id，文章id
+  static String collectArticle(int id) => '/lg/collect/$id/json';
+  
+  /// 取消收藏文章（文章列表）
+  /// 方法：POST
+  /// 参数：id，文章id
+  static String uncollectArticle(int id) => '/lg/uncollect_originId/$id/json';
+  
+  /// 取消收藏（我的收藏页面）
+  /// 方法：POST
+  /// 参数：id，originId（可选，收藏时文章的原始id）
+  static String uncollectFromMyPage(int id) => '/lg/uncollect/$id/json';
 
   // ==================== 用户相关 ====================
   

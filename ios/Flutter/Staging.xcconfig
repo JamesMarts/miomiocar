@@ -1,0 +1,18 @@
+// 测试环境配置
+#include "Generated.xcconfig"
+
+// 应用名称
+APP_DISPLAY_NAME=Flutter Demo Staging
+
+// Bundle ID 后缀
+BUNDLE_ID_SUFFIX=.staging
+
+// 应用 Bundle ID
+PRODUCT_BUNDLE_IDENTIFIER=com.example.flutterDemo.staging
+
+// Flavor 标识
+FLUTTER_FLAVOR=staging
+
+// Dart 入口文件
+FLUTTER_TARGET=lib/main_staging.dart
+

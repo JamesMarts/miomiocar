@@ -87,6 +87,33 @@ class AppLocalizations {
   String get searchHint => locale.languageCode == 'ar' ? 'بحث...' : 'Search...';
   String get noSearchResults => locale.languageCode == 'ar' ? 'لا توجد نتائج' : 'No results found';
 
+  // ==================== 认证相关 ====================
+  
+  String get register => locale.languageCode == 'ar' ? 'تسجيل' : 'Register';
+  String get confirmPassword => locale.languageCode == 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password';
+  String get forgotPassword => locale.languageCode == 'ar' ? 'نسيت كلمة المرور؟' : 'Forgot Password?';
+  String get noAccount => locale.languageCode == 'ar' ? 'ليس لديك حساب؟' : "Don't have an account?";
+  String get haveAccount => locale.languageCode == 'ar' ? 'لديك حساب بالفعل؟' : 'Already have an account?';
+  String get loginSuccess => locale.languageCode == 'ar' ? 'تم تسجيل الدخول بنجاح' : 'Login successful';
+  String get registerSuccess => locale.languageCode == 'ar' ? 'تم التسجيل بنجاح' : 'Registration successful';
+  String get logoutSuccess => locale.languageCode == 'ar' ? 'تم تسجيل الخروج بنجاح' : 'Logout successful';
+  String get loginFailed => locale.languageCode == 'ar' ? 'فشل تسجيل الدخول' : 'Login failed';
+  String get registerFailed => locale.languageCode == 'ar' ? 'فشل التسجيل' : 'Registration failed';
+  String get usernameRequired => locale.languageCode == 'ar' ? 'الرجاء إدخال اسم المستخدم' : 'Please enter username';
+  String get passwordRequired => locale.languageCode == 'ar' ? 'الرجاء إدخال كلمة المرور' : 'Please enter password';
+  String get confirmPasswordRequired => locale.languageCode == 'ar' ? 'الرجاء تأكيد كلمة المرور' : 'Please confirm password';
+  String get passwordNotMatch => locale.languageCode == 'ar' ? 'كلمة المرور غير متطابقة' : 'Passwords do not match';
+  String get usernameMinLength => locale.languageCode == 'ar' ? 'يجب أن يكون اسم المستخدم 3 أحرف على الأقل' : 'Username must be at least 3 characters';
+  String get passwordMinLength => locale.languageCode == 'ar' ? 'يجب أن تكون كلمة المرور 6 أحرف على الأقل' : 'Password must be at least 6 characters';
+  String get welcomeBack => locale.languageCode == 'ar' ? 'مرحبًا بعودتك' : 'Welcome Back';
+  String get createAccount => locale.languageCode == 'ar' ? 'إنشاء حساب' : 'Create Account';
+  String get signInToContinue => locale.languageCode == 'ar' ? 'سجل الدخول للمتابعة' : 'Sign in to continue';
+  String get signUpToGetStarted => locale.languageCode == 'ar' ? 'سجل لتبدأ' : 'Sign up to get started';
+  String get orContinueWith => locale.languageCode == 'ar' ? 'أو المتابعة باستخدام' : 'Or continue with';
+  String get coins => locale.languageCode == 'ar' ? 'العملات' : 'Coins';
+  String get level => locale.languageCode == 'ar' ? 'المستوى' : 'Level';
+  String get rank => locale.languageCode == 'ar' ? 'الترتيب' : 'Rank';
+
   String userCount(int count) {
     return locale.languageCode == 'ar' ? '$count مستخدمين' : '$count users';
   }
